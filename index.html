@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dragon Ball Z Watch Party</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bangers&family=Teko:wght@400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Teko', sans-serif;
+            background: linear-gradient(135deg, #ff6b00 0%, #ff8c00 25%, #1e3a8a 75%, #0f172a 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255, 107, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(30, 58, 138, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.3), rgba(30, 58, 138, 0.3));
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 3px solid #ff6b00;
+            box-shadow: 0 0 30px rgba(255, 107, 0, 0.5);
+            position: relative;
+        }
+
+        header::before {
+            content: '⭐';
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 2em;
+            animation: twinkle 2s infinite;
+        }
+
+        header::after {
+            content: '⭐';
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 2em;
+            animation: twinkle 2s infinite 1s;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        header h1 {
+            font-family: 'Bangers', cursive;
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #fff;
+            text-shadow: 
+                3px 3px 0 #ff6b00,
+                -3px -3px 0 #1e3a8a,
+                3px -3px 0 #ff6b00,
+                -3px 3px 0 #1e3a8a,
+                0 0 20px rgba(255, 107, 0, 0.8);
+            letter-spacing: 3px;
+        }
+
+        header p {
+            font-size: 1.3em;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .video-section {
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.2), rgba(30, 58, 138, 0.2));
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            border: 3px solid #ff6b00;
+            box-shadow: 0 0 20px rgba(255, 107, 0, 0.3);
+        }
+
+        .room-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .room-code {
+            background: linear-gradient(135deg, #ff6b00, #ff8c00);
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 1.1em;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(255, 107, 0, 0.5);
+            border: 2px solid #fff;
+        }
+
+        .viewers-count {
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 1.1em;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(30, 58, 138, 0.5);
+            border: 2px solid #fff;
+        }
+
+        .power-level-bar {
+            background: rgba(0, 0, 0, 0.5);
+            height: 25px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            border: 2px solid #ff6b00;
+            position: relative;
+        }
+
+        .power-level-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b00, #ffed00);
+            width: 0%;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 20px rgba(255, 237, 0, 0.8);
+        }
+
+        .power-level-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-weight: 700;
+            font-size: 0.9em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            letter-spacing: 1px;
+        }
+
+        .video-player {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid #ff6b00;
+            box-shadow: 0 0 30px rgba(255, 107, 0, 0.4);
+        }
+
+        .video-player video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .placeholder-text {
+            text-align: center;
+            color: #888;
+            font-size: 1.2em;
+            font-weight: 500;
+        }
+
+        .video-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .video-controls input {
+            flex: 1;
+            padding: 14px;
+            border: 2px solid #ff6b00;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            font-size: 1em;
+            font-weight: 500;
+            font-family: 'Teko', sans-serif;
+        }
+
+        .video-controls button {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #ff6b00, #ff8c00);
+            color: white;
+            font-weight: 700;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid #fff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Teko', sans-serif;
+            box-shadow: 0 4px 15px rgba(255, 107, 0, 0.4);
+        }
+
+        .video-controls button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(255, 107, 0, 0.6);
+        }
+
+        .video-controls button:active {
+            transform: translateY(0);
+        }
+
+        .playback-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .playback-controls button {
+            padding: 14px 20px;
+            border: 2px solid #ff6b00;
+            border-radius: 8px;
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.3), rgba(30, 58, 138, 0.3));
+            backdrop-filter: blur(5px);
+            color: white;
+            font-weight: 700;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            flex: 1;
+            font-family: 'Teko', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .playback-controls button:hover {
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.5), rgba(30, 58, 138, 0.5));
+            transform: scale(1.05);
+        }
+
+        .chat-section {
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.2), rgba(30, 58, 138, 0.2));
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            border: 3px solid #1e3a8a;
+            box-shadow: 0 0 20px rgba(30, 58, 138, 0.3);
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+
+        .chat-section h2 {
+            margin-bottom: 15px;
+            font-family: 'Bebas Neue', cursive;
+            font-size: 1.8em;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            border: 2px solid #1e3a8a;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #ff6b00, #1e3a8a);
+            border-radius: 5px;
+        }
+
+        .message {
+            margin-bottom: 12px;
+            padding: 12px;
+            background: rgba(255, 107, 0, 0.2);
+            border-radius: 8px;
+            animation: slideIn 0.3s ease;
+            border-left: 4px solid #ff6b00;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .message .username {
+            font-weight: 700;
+            color: #ffed00;
+            margin-bottom: 5px;
+            display: block;
+            font-size: 1.1em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .message .text {
+            color: #fff;
+            word-wrap: break-word;
+            font-size: 1em;
+        }
+
+        .message.system {
+            background: rgba(30, 58, 138, 0.4);
+            text-align: center;
+            font-style: italic;
+            font-size: 1em;
+            border-left: 4px solid #1e3a8a;
+        }
+
+        .chat-input-area {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            padding: 14px;
+            border: 2px solid #1e3a8a;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            font-size: 1em;
+            font-weight: 500;
+            font-family: 'Teko', sans-serif;
+        }
+
+        .chat-input-area button {
+            padding: 14px 25px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #1e3a8a, #0f172a);
+            color: white;
+            font-weight: 700;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid #fff;
+            font-family: 'Teko', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(30, 58, 138, 0.4);
+        }
+
+        .chat-input-area button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(30, 58, 138, 0.6);
+        }
+
+        .room-management {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .room-card {
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.3), rgba(30, 58, 138, 0.3));
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            border: 3px solid #ff6b00;
+            text-align: center;
+            box-shadow: 0 0 25px rgba(255, 107, 0, 0.4);
+        }
+
+        .room-card h3 {
+            margin-bottom: 20px;
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2em;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .room-card input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #ff6b00;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1em;
+            font-weight: 500;
+            font-family: 'Teko', sans-serif;
+        }
+
+        .room-card button {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #ff6b00, #ff8c00);
+            color: white;
+            font-weight: 700;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 10px;
+            border: 2px solid #fff;
+            font-family: 'Teko', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 15px rgba(255, 107, 0, 0.4);
+        }
+
+        .room-card button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 8px 30px rgba(255, 107, 0, 0.6);
+        }
+
+        .timestamp-display {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 1.1em;
+            text-align: center;
+            font-weight: 600;
+            border: 2px solid #ff6b00;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .chat-section {
+                height: 400px;
+            }
+
+            header h1 {
+                font-size: 2.2em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .room-management {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .emoji-reactions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .emoji-btn {
+            padding: 10px 18px;
+            border: 2px solid #ff6b00;
+            border-radius: 20px;
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.3), rgba(30, 58, 138, 0.3));
+            backdrop-filter: blur(5px);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.4em;
+        }
+
+        .emoji-btn:hover {
+            background: linear-gradient(135deg, rgba(255, 107, 0, 0.6), rgba(30, 58, 138, 0.6));
+            transform: scale(1.2);
+            box-shadow: 0 0 20px rgba(255, 107, 0, 0.6);
+        }
+
+        .reaction-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 5em;
+            animation: kamehameha 1.5s ease;
+            pointer-events: none;
+            z-index: 1000;
+            text-shadow: 0 0 30px rgba(255, 237, 0, 0.8);
+        }
+
+        @keyframes kamehameha {
+            0% {
+                transform: translate(-50%, -50%) scale(0) rotate(0deg);
+                opacity: 1;
+            }
+            50% {
+                transform: translate(-50%, -70%) scale(2) rotate(180deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -120%) scale(1.5) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .energy-aura {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            opacity: 0;
+            animation: auraGlow 3s infinite;
+        }
+
+        @keyframes auraGlow {
+            0%, 100% {
+                opacity: 0;
+                box-shadow: inset 0 0 50px rgba(255, 237, 0, 0);
+            }
+            50% {
+                opacity: 1;
+                box-shadow: inset 0 0 80px rgba(255, 237, 0, 0.3);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🐉 DRAGON BALL Z WATCH PARTY 🐉</h1>
+            <p>POWER UP YOUR VIEWING EXPERIENCE!</p>
+        </header>
+
+        <div class="room-management" id="roomManagement">
+            <div class="room-card">
+                <h3>⚡ Create New Room</h3>
+                <input type="text" id="createUsername" placeholder="Enter your Saiyan name" />
+                <button onclick="createRoom()">CREATE ROOM!</button>
+            </div>
+            <div class="room-card">
+                <h3>🌟 Join Room</h3>
+                <input type="text" id="joinUsername" placeholder="Enter your Saiyan name" />
+                <input type="text" id="joinRoomCode" placeholder="Enter room code" />
+                <button onclick="joinRoom()">JOIN NOW!</button>
+            </div>
+        </div>
+
+        <div class="main-content" id="mainContent" style="display: none;">
+            <div class="video-section">
+                <div class="room-info">
+                    <div class="room-code">ROOM: <span id="currentRoomCode">XXXX</span></div>
+                    <div class="viewers-count">👥 <span id="viewerCount">1</span> Z-FIGHTERS</div>
+                </div>
+
+                <div class="power-level-bar">
+                    <div class="power-level-fill" id="powerLevelFill"></div>
+                    <div class="power-level-text">POWER LEVEL: <span id="powerLevel">0</span></div>
+                </div>
+
+                <div class="video-player" id="videoPlayer">
+                    <div class="energy-aura"></div>
+                    <p class="placeholder-text">LOAD A VIDEO TO START THE BATTLE!</p>
+                </div>
+
+                <div class="video-controls">
+                    <input type="text" id="videoUrl" placeholder="Paste video URL (MP4, WebM)" />
+                    <button onclick="loadVideo()">LOAD!</button>
+                </div>
+
+                <div class="playback-controls">
+                    <button onclick="togglePlayPause()">▶️ PLAY/PAUSE</button>
+                    <button onclick="seekBackward()">⏪ REWIND</button>
+                    <button onclick="seekForward()">⏩ FAST FORWARD</button>
+                </div>
+
+                <div class="timestamp-display">
+                    TIME: <span id="currentTime">00:00</span> / <span id="duration">00:00</span>
+                </div>
+
+                <div class="emoji-reactions">
+                    <button class="emoji-btn" onclick="sendReaction('💥')" title="Kamehameha!">💥</button>
+                    <button class="emoji-btn" onclick="sendReaction('⚡')" title="Super Saiyan!">⚡</button>
+                    <button class="emoji-btn" onclick="sendReaction('🔥')" title="Fire!">🔥</button>
+                    <button class="emoji-btn" onclick="sendReaction('👊')" title="Punch!">👊</button>
+                    <button class="emoji-btn" onclick="sendReaction('⭐')" title="Dragon Ball!">⭐</button>
+                    <button class="emoji-btn" onclick="sendReaction('🐉')" title="Shenron!">🐉</button>
+                </div>
+            </div>
+
+            <div class="chat-section">
+                <h2>💬 Z-FIGHTER CHAT</h2>
+                <div class="chat-messages" id="chatMessages"></div>
+                <div class="chat-input-area">
+                    <input type="text" id="chatInput" placeholder="Type your message..." onkeypress="handleChatKeypress(event)" />
+                    <button onclick="sendMessage()">SEND</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentRoom = null;
+        let username = '';
+        let videoElement = null;
+        let syncInterval = null;
+        let powerLevel = 0;
+        let roomData = {
+            viewers: [],
+            messages: [],
+            videoState: {
+                url: '',
+                playing: false,
+                currentTime: 0
+            }
+        };
+
+        function generateRoomCode() {
+            const codes = ['KAME', 'GOKU', 'VEGETA', 'GOHAN', 'TRUNKS', 'BEERUS', 'WHIS', 'SHENRON'];
+            return codes[Math.floor(Math.random() * codes.length)] + Math.floor(Math.random() * 1000);
+        }
+
+        function createRoom() {
+            const usernameInput = document.getElementById('createUsername').value.trim();
+            if (!usernameInput) {
+                alert('Please enter your Saiyan name!');
+                return;
+            }
+
+            username = usernameInput;
+            currentRoom = generateRoomCode();
+            roomData.viewers = [username];
+            
+            document.getElementById('roomManagement').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'grid';
+            document.getElementById('currentRoomCode').textContent = currentRoom;
+            updateViewerCount();
+            
+            addSystemMessage(`${username} has entered the battlefield!`);
+            addSystemMessage(`Room ${currentRoom} created successfully. Share the code!`);
+            increasePowerLevel(1000);
+        }
+
+        function joinRoom() {
+            const usernameInput = document.getElementById('joinUsername').value.trim();
+            const roomCode = document.getElementById('joinRoomCode').value.trim();
+            
+            if (!usernameInput || !roomCode) {
+                alert('Please enter both your name and room code!');
+                return;
+            }
+
+            username = usernameInput;
+            currentRoom = roomCode;
+            
+            if (!roomData.viewers.includes(username)) {
+                roomData.viewers.push(username);
+            }
+            
+            document.getElementById('roomManagement').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'grid';
+            document.getElementById('currentRoomCode').textContent = currentRoom;
+            updateViewerCount();
+            
+            addSystemMessage(`${username} joined the battle!`);
+            increasePowerLevel(500);
+        }
+
+        function updateViewerCount() {
+            document.getElementById('viewerCount').textContent = roomData.viewers.length;
+        }
+
+        function increasePowerLevel(amount) {
+            powerLevel += amount;
+            const percentage = Math.min((powerLevel / 9000) * 100, 100);
+            document.getElementById('powerLevel').textContent = powerLevel;
+            document.getElementById('powerLevelFill').style.width = percentage + '%';
+            
+            if (powerLevel > 9000) {
+                addSystemMessage("IT'S OVER 9000!!!");
+            }
+        }
+
+        function loadVideo() {
+            const url = document.getElementById('videoUrl').value.trim();
+            if (!url) {
+                alert('Please enter a video URL!');
+                return;
+            }
+
+            const player = document.getElementById('videoPlayer');
+            player.innerHTML = `<div class="energy-aura"></div><video id="videoElement" controls style="width: 100%; height: 100%;">
+                <source src="${url}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>`;
+
+            videoElement = document.getElementById('videoElement');
+            roomData.videoState.url = url;
+            
+            videoElement.addEventListener('loadedmetadata', () => {
+                updateTimeDisplay();
+            });
+
+            videoElement.addEventListener('timeupdate', () => {
+                updateTimeDisplay();
+            });
+
+            addSystemMessage(`Video loaded! Let the battle begin!`);
+            increasePowerLevel(2000);
+            startVideoSync();
+        }
+
+        function togglePlayPause() {
+            if (!videoElement) {
+                alert('Please load a video first!');
+                return;
+            }
+
+            if (videoElement.paused) {
+                videoElement.play();
+                roomData.videoState.playing = true;
+                addSystemMessage(`${username} started the video!`);
+                increasePowerLevel(100);
+            } else {
+                videoElement.pause();
+                roomData.videoState.playing = false;
+                addSystemMessage(`${username} paused the video`);
+            }
+        }
+
+        function seekForward() {
+            if (!videoElement) return;
+            videoElement.currentTime = Math.min(videoElement.currentTime + 10, videoElement.duration);
+            syncVideoState();
+        }
+
+        function seekBackward() {
+            if (!videoElement) return;
+            videoElement.currentTime = Math.max(videoElement.currentTime - 10, 0);
+            syncVideoState();
+        }
+
+        function startVideoSync() {
+            syncInterval = setInterval(() => {
+                if (videoElement) {
+                    roomData.videoState.currentTime = videoElement.currentTime;
+                }
+            }, 1000);
+        }
+
+        function syncVideoState() {
+            if (videoElement) {
+                roomData.videoState.currentTime = videoElement.currentTime;
+                roomData.videoState.playing = !videoElement.paused;
+            }
+        }
+
+        function updateTimeDisplay() {
+            if (!videoElement) return;
+            
+            const current = formatTime(videoElement.currentTime);
+            const total = formatTime(videoElement.duration);
+            
+            document.getElementById('currentTime').textContent = current;
+            document.getElementById('duration').textContent = total;
+        }
+
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return '00:00';
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            addChatMessage(username, message);
+            input.value = '';
+            increasePowerLevel(50);
+        }
+
+        function handleChatKeypress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function addChatMessage(user, text) {
+            const messagesDiv = document.getElementById('chatMessages');
+            const messageEl = document.createElement('div');
+            messageEl.className = 'message';
+            messageEl.innerHTML = `
+                <span class="username">${user}</span>
+                <span class="text">${escapeHtml(text)}</span>
+            `;
+            messagesDiv.appendChild(messageEl);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            
+            roomData.messages.push({ user, text, timestamp: Date.now() });
+        }
+
+        function addSystemMessage(text) {
+            const messagesDiv = document.getElementById('chatMessages');
+            const messageEl = document.createElement('div');
+            messageEl.className = 'message system';
+            messageEl.textContent = text;
+            messagesDiv.appendChild(messageEl);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function sendReaction(emoji) {
+            addSystemMessage(`${username} reacted with ${emoji}`);
+            showReactionPopup(emoji);
+            increasePowerLevel(200);
+        }
+
+        function showReactionPopup(emoji) {
+            const popup = document.createElement('div');
+            popup.className = 'reaction-popup';
+            popup.textContent = emoji;
+            document.body.appendChild(popup);
+            
+            setTimeout(() => {
+                popup.remove();
+            }, 1500);
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
